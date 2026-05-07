@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>당고 리듬게임</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="titleScreen">
+
+        <img
+            src="assets/start.png"
+            class="titleImage"
+        >
+
+        <button id="startButton">
+            GAME START
+        </button>
+
+    </div>
+
+    <div id="gameContainer" class="hidden">
+
+        <div id="timerBarContainer">
+            <div id="timerBar"></div>
+        </div>
+
+        <div id="scoreArea">
+            SCORE : <span id="score">0</span>
+        </div>
+
+        <div id="characterArea">
+
+            <div class="targetArea">
+
+                <div
+                    class="target"
+                    data-color="pink"
+                >
+
+                    <img
+                        src="assets/spring.png"
+                        class="character rightChar"
+                    >
+
+                    <div class="hitBar"></div>
+
+                </div>
+
+                <div
+                    class="target"
+                    data-color="green"
+                >
+
+                    <img
+                        src="assets/summer.png"
+                        class="character rightChar"
+                    >
+
+                    <div class="hitBar"></div>
+
+                </div>
+
+                <div
+                    class="target"
+                    data-color="white"
+                >
+
+                    <img
+                        src="assets/winter.png"
+                        class="character rightChar"
+                    >
+
+                    <div class="hitBar"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="lane">
+
+            <img
+                src="assets/autumn.png"
+                id="laneAutumn"
+                class="character"
+            >
+
+            <div id="track"></div>
+
+        </div>
+
+        <img
+            id="judgement"
+            src=""
+        >
+
+    </div>
+
+    <div id="endingScreen" class="hidden">
+
+        <div id="endingContent">
+
+            <div id="endingText"></div>
+
+            <img
+                id="endingImage"
+                src=""
+            >
+
+            <button
+                id="endingResetButton"
+                class="resetButton"
+            >
+                RESET
+            </button>
+
+        </div>
+
+    </div>
+
+    <audio
+        id="bgm"
+        src="assets/bgm.mp3"
+    ></audio>
+
+    <div class="audioOptions">
+
+        <label>
+
+            <input
+                type="checkbox"
+                id="bgmToggle"
+                checked
+            >
+
+            BGM
+
+        </label>
+
+        <input
+            type="range"
+            id="volumeSlider"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.5"
+        >
+
+        <button
+            id="resetButton"
+            class="resetButton hidden"
+        >
+            RESET
+        </button>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
