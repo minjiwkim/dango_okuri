@@ -285,3 +285,24 @@ body {
 
     border-radius: 999px;
 }
+
+#spaceGuide {
+    position: absolute;
+
+    bottom: 24px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    font-size: 28px;
+    font-weight: bold;
+
+    color: #444;
+
+    letter-spacing: 2px;
+
+    z-index: 100;
+
+    user-select: none;
+    pointer-events: none;
+}
