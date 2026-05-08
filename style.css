@@ -118,7 +118,6 @@ body {
 @media (max-width: 768px) {
     #characterArea {
         top: 50vh;
-        transform: translateY(4vh);
     }
 }
 
@@ -168,7 +167,7 @@ body {
 
 @media (max-width: 768px) {
     .hitBar {
-        width: 10vw;
+        width: 15vw;
     }
 }
 
