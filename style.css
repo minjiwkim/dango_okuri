@@ -117,7 +117,7 @@ body {
 
 @media (max-width: 768px) {
     #characterArea {
-        top: 50vh;
+        top: 40vh;
     }
 }
 
@@ -167,7 +167,7 @@ body {
 
 @media (max-width: 768px) {
     .hitBar {
-        width: 15vw;
+        width: 12vw;
     }
 }
 
