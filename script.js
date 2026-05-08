@@ -31,6 +31,8 @@ let timerInterval;
 
 let judgeTimeout;
 
+let lastTime = 0;
+
 const GAME_TIME = 60;
 const TARGET_SCORE = 1000;
 
@@ -38,7 +40,11 @@ let timeLeft = GAME_TIME;
 
 bgm.loop = true;
 
-const noteSpeed = 0.6;
+/*
+    기존 0.6은 프레임 기반 속도였음.
+    시간 기반(deltaTime)으로 바꾸면서 조정.
+*/
+const noteSpeed = 0.04;
 
 const targetPositions = {};
 
@@ -84,6 +90,8 @@ function startGame() {
     setTimeout(spawnNextNote, 1000);
 
     startTimer();
+
+    lastTime = performance.now();
 
     requestAnimationFrame(update);
 }
@@ -166,17 +174,24 @@ function createNote(color) {
     notes.push(noteData);
 }
 
-function update() {
+function update(currentTime) {
 
     if (!gameStarted) return;
+
+    const deltaTime = currentTime - lastTime;
+
+    lastTime = currentTime;
+
+    const moveAmount = noteSpeed * deltaTime;
 
     for (let i = notes.length - 1; i >= 0; i--) {
 
         const note = notes[i];
 
-        note.x += noteSpeed;
+        note.x += moveAmount;
 
-        note.element.style.left = `calc(${note.x}% - 22.5px)`;
+        note.element.style.left =
+            `calc(${note.x}% - 22.5px)`;
 
         const targetX = targetPositions[note.color];
 
@@ -221,6 +236,8 @@ function getTargetPosition(color) {
 window.addEventListener("keydown", (e) => {
 
     if (!gameStarted) return;
+
+    if (e.repeat) return;
 
     if (e.code !== "Space") return;
 
@@ -293,6 +310,9 @@ function showJudge(text) {
 
     judgement.classList.remove("judgeShow");
 
+    /*
+        애니메이션 강제 재시작
+    */
     void judgement.offsetWidth;
 
     judgement.classList.add("judgeShow");
