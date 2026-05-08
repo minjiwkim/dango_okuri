@@ -32,6 +32,7 @@ body {
 @media (max-width: 768px) {
     .titleImage {
         width: 80vw;
+        border: 5px solid red;
     }
 }
 
@@ -286,11 +287,10 @@ body {
 }
 
 @media (max-width: 768px) {
-    .endingImage {
+    #endingImage {
         width: 80vw;
     }
 }
-
 
 #endingContent {
     display: flex;
