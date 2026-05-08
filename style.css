@@ -115,6 +115,13 @@ body {
     align-items: flex-end;
 }
 
+@media (max-width: 768px) {
+    #characterArea {
+        top: 18vh;
+        transform: translateY(4vh);
+    }
+}
+
 .character {
     user-select: none;
     pointer-events: none;
@@ -140,6 +147,12 @@ body {
     height: clamp(14vh, 16vw, 28vh);
 }
 
+@media (max-width: 768px) {
+    .rightChar {
+        height: 11vh;
+    }
+}
+
 .hitBar {
     width: 6vw;
     height: 1.8vh;
@@ -151,6 +164,12 @@ body {
     border: 0.4vh solid #444;
 
     box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .hitBar {
+        width: 8vw;
+    }
 }
 
 .target[data-color="pink"] .hitBar {
