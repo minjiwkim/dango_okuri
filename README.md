@@ -6,7 +6,10 @@
 ## 플레이 방법
 아래 링크에서 플레이 가능:  
 https://minjiwkim.github.io/dango_okuri/
-<br>
+
+--
+
+- 플레이 시간: 1분
 - 색이 맞는 구간에서 타이밍에 맞춰 스페이스 바 입력
 - 정확한 타이밍일수록 높은 점수 획득
 - 판정 종류: Perfect, Great, Good, Miss
