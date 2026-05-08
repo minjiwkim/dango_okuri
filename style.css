@@ -123,7 +123,7 @@ body {
 
 @media (max-width: 768px) {
     #characterArea {
-        transform: translateY(20vh);
+        transform: translateY(15vh);
     }
 }
 
@@ -207,7 +207,7 @@ body {
 
 @media (max-width: 768px) {
     #lane {
-        transform: translateY(-5vh);
+        transform: translateY(-10vh);
     }
 }
 
@@ -237,7 +237,7 @@ body {
 
 @media (max-width: 768px) {
     #track {
-        border-bottom: 0.4vh solid #444;
+        border-bottom: 0.3vh solid #444;
     }
 }
 
