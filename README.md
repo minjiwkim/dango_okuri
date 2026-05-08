@@ -16,4 +16,4 @@ https://minjiwkim.github.io/dango_okuri/
 - **1000점 이상: 성공**
 - **1000점 미만: 실패**
 <br>
-*BGM 음량 조절 및 on/off 가능.
+*BGM 음량 조절 및 on/off 가능
