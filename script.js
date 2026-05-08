@@ -200,6 +200,23 @@ window.addEventListener("keydown", (e) => {
 });
 
 /* =========================
+   TOUCH INPUT (MOBILE)
+========================= */
+window.addEventListener("touchstart", (e) => {
+    if (!gameStarted) return;
+    if (notes.length === 0) return;
+
+    const note = notes[0];
+
+    const noteCenter = note.x + (note.element.offsetWidth / 2);
+    const targetX = targetPositions[note.color];
+
+    const distance = Math.abs(noteCenter - targetX);
+
+    judgeNote(note, distance);
+}, { passive: true });
+
+/* =========================
    JUDGE
 ========================= */
 function judgeNote(note, distance) {
