@@ -29,6 +29,12 @@ body {
     object-fit: contain;
 }
 
+@media (max-width: 768px) {
+    .titleImage {
+        width: 80vw;
+    }
+}
+
 #startButton {
     padding: 1.8vh 3vw;
 
@@ -278,6 +284,13 @@ body {
     height: auto;
     object-fit: contain;
 }
+
+@media (max-width: 768px) {
+    .endingImage {
+        width: 80vw;
+    }
+}
+
 
 #endingContent {
     display: flex;
