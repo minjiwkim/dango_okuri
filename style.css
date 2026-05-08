@@ -117,7 +117,7 @@ body {
 
 @media (max-width: 768px) {
     #characterArea {
-        top: 30vh;
+        top: 20vh;
     }
 }
 
@@ -163,12 +163,6 @@ body {
     border: 0.4vh solid #444;
 
     box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-    .hitBar {
-        width: 8vw;
-    }
 }
 
 .target[data-color="pink"] .hitBar {
