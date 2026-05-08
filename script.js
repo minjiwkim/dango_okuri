@@ -331,14 +331,14 @@ function endGame() {
     if (score >= TARGET_SCORE) {
 
         endingText.innerHTML =
-            `성공!<br>FINAL SCORE : ${score}`;
+            `SUCCESS!<br>FINAL SCORE : ${score}`;
 
         endingImage.src = "assets/ending1.png";
 
     } else {
 
         endingText.innerHTML =
-            `실패...<br>FINAL SCORE : ${score}`;
+            `FAIL...<br>FINAL SCORE : ${score}`;
 
         endingImage.src = "assets/ending2.png";
     }
