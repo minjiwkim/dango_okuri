@@ -22,13 +22,10 @@ const resetButton = document.getElementById("resetButton");
 const endingResetButton = document.getElementById("endingResetButton");
 
 let score = 0;
-
 let notes = [];
-
 let gameStarted = false;
 
 let timerInterval;
-
 let judgeTimeout;
 
 let lastTime = 0;
@@ -40,10 +37,6 @@ let timeLeft = GAME_TIME;
 
 bgm.loop = true;
 
-/*
-    기존 0.6은 프레임 기반 속도였음.
-    시간 기반(deltaTime)으로 바꾸면서 조정.
-*/
 const noteSpeed = 0.04;
 
 const targetPositions = {};
@@ -59,11 +52,8 @@ volumeSlider.addEventListener("input", () => {
 bgmToggle.addEventListener("change", () => {
 
     if (bgmToggle.checked) {
-
         bgm.play();
-
     } else {
-
         bgm.pause();
     }
 });
@@ -71,7 +61,6 @@ bgmToggle.addEventListener("change", () => {
 function startGame() {
 
     titleScreen.style.display = "none";
-
     gameContainer.classList.remove("hidden");
 
     gameStarted = true;
@@ -81,10 +70,7 @@ function startGame() {
     cacheTargetPositions();
 
     if (bgmToggle.checked) {
-
-        bgm.play().catch(() => {
-            console.log("bgm blocked");
-        });
+        bgm.play().catch(() => {});
     }
 
     setTimeout(spawnNextNote, 1000);
@@ -99,9 +85,7 @@ function startGame() {
 function cacheTargetPositions() {
 
     ["pink", "green", "white"].forEach(color => {
-
         targetPositions[color] = getTargetPosition(color);
-
     });
 }
 
@@ -110,9 +94,7 @@ function spawnNextNote() {
     if (!gameStarted) return;
 
     const colors = ["pink", "green", "white"];
-
-    const randomColor =
-        colors[Math.floor(Math.random() * colors.length)];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     createNote(randomColor);
 }
@@ -123,14 +105,10 @@ function startTimer() {
 
         timeLeft--;
 
-        const percent = (timeLeft / GAME_TIME) * 100;
-
-        timerBar.style.width = percent + "%";
+        timerBar.style.width = (timeLeft / GAME_TIME) * 100 + "%";
 
         if (timeLeft <= 0) {
-
             clearInterval(timerInterval);
-
             endGame();
         }
 
@@ -140,23 +118,11 @@ function startTimer() {
 function createNote(color) {
 
     const note = document.createElement("div");
-
     note.classList.add("dango");
 
-    if (color === "pink") {
-        note.style.backgroundImage =
-            'url("assets/dango_pink.png")';
-    }
-
-    if (color === "green") {
-        note.style.backgroundImage =
-            'url("assets/dango_green.png")';
-    }
-
-    if (color === "white") {
-        note.style.backgroundImage =
-            'url("assets/dango_white.png")';
-    }
+    if (color === "pink") note.style.backgroundImage = 'url("assets/dango_pink.png")';
+    if (color === "green") note.style.backgroundImage = 'url("assets/dango_green.png")';
+    if (color === "white") note.style.backgroundImage = 'url("assets/dango_white.png")';
 
     note.style.backgroundSize = "contain";
     note.style.backgroundRepeat = "no-repeat";
@@ -164,14 +130,12 @@ function createNote(color) {
 
     track.appendChild(note);
 
-    const noteData = {
+    notes.push({
         element: note,
-        color: color,
+        color,
         x: 0,
         hit: false
-    };
-
-    notes.push(noteData);
+    });
 }
 
 function update(currentTime) {
@@ -179,7 +143,6 @@ function update(currentTime) {
     if (!gameStarted) return;
 
     const deltaTime = currentTime - lastTime;
-
     lastTime = currentTime;
 
     const moveAmount = noteSpeed * deltaTime;
@@ -188,10 +151,10 @@ function update(currentTime) {
 
         const note = notes[i];
 
-        note.x += moveAmount;
+        if (note.hit) continue;
 
-        note.element.style.left =
-            `calc(${note.x}% - 22.5px)`;
+        note.x += moveAmount;
+        note.element.style.left = `calc(${note.x}% - 22.5px)`;
 
         const targetX = targetPositions[note.color];
 
@@ -200,12 +163,13 @@ function update(currentTime) {
                 ? 100
                 : targetX + 4;
 
-        if (note.x > missLimit && !note.hit) {
+        if (note.x > missLimit) {
+
+            note.hit = true;
 
             showJudge("MISS");
 
             note.element.remove();
-
             notes.splice(i, 1);
 
             setTimeout(spawnNextNote, 1000);
@@ -215,38 +179,33 @@ function update(currentTime) {
     requestAnimationFrame(update);
 }
 
+
 function getTargetPosition(color) {
 
-    const target =
-        document.querySelector(`.target[data-color="${color}"]`);
+    const target = document.querySelector(`.target[data-color="${color}"]`);
 
     const trackRect = track.getBoundingClientRect();
-
     const targetRect = target.getBoundingClientRect();
 
-    const targetCenter =
-        targetRect.left + (targetRect.width / 2);
+    const targetCenter = targetRect.left + targetRect.width / 2;
 
-    const percent =
-        ((targetCenter - trackRect.left) / trackRect.width) * 100;
-
-    return percent;
+    return ((targetCenter - trackRect.left) / trackRect.width) * 100;
 }
 
 window.addEventListener("keydown", (e) => {
 
     if (!gameStarted) return;
-
     if (e.repeat) return;
-
     if (e.code !== "Space") return;
-
     if (notes.length <= 0) return;
 
-    const firstNote = notes[0];
+    const firstNote = notes.reduce((best, n) => {
+        return (!best || n.x > best.x) ? n : best;
+    }, null);
+
+    if (!firstNote || firstNote.hit) return;
 
     const targetX = targetPositions[firstNote.color];
-
     const distance = Math.abs(firstNote.x - targetX);
 
     judgeNote(firstNote, distance);
@@ -254,34 +213,27 @@ window.addEventListener("keydown", (e) => {
 
 function judgeNote(note, distance) {
 
-    let result = "MISS";
-
-    if (distance < 1) {
-
-        result = "PERFECT";
-
-        score += 100;
-
-    } else if (distance < 2.5) {
-
-        result = "GREAT";
-
-        score += 50;
-
-    } else if (distance < 4) {
-
-        result = "GOOD";
-
-        score += 30;
-    }
+    if (note.hit) return; // ★ 이중 방어
 
     note.hit = true;
 
-    note.element.remove();
+    let result = "MISS";
 
-    notes = notes.filter(n => n !== note);
+    if (distance < 1) {
+        result = "PERFECT";
+        score += 100;
+    } else if (distance < 2.5) {
+        result = "GREAT";
+        score += 50;
+    } else if (distance < 4) {
+        result = "GOOD";
+        score += 30;
+    }
 
     scoreText.textContent = score;
+
+    note.element.remove();
+    notes = notes.filter(n => n !== note);
 
     showJudge(result);
 
@@ -290,37 +242,21 @@ function judgeNote(note, distance) {
 
 function showJudge(text) {
 
-    if (text === "PERFECT") {
-        judgement.src = "assets/perfect.png";
-    }
-
-    if (text === "GREAT") {
-        judgement.src = "assets/great.png";
-    }
-
-    if (text === "GOOD") {
-        judgement.src = "assets/good.png";
-    }
-
-    if (text === "MISS") {
-        judgement.src = "assets/miss.png";
-    }
+    if (text === "PERFECT") judgement.src = "assets/perfect.png";
+    if (text === "GREAT") judgement.src = "assets/great.png";
+    if (text === "GOOD") judgement.src = "assets/good.png";
+    if (text === "MISS") judgement.src = "assets/miss.png";
 
     clearTimeout(judgeTimeout);
 
     judgement.classList.remove("judgeShow");
 
-    /*
-        애니메이션 강제 재시작
-    */
     void judgement.offsetWidth;
 
     judgement.classList.add("judgeShow");
 
     judgeTimeout = setTimeout(() => {
-
         judgement.classList.remove("judgeShow");
-
     }, 300);
 }
 
@@ -329,22 +265,14 @@ function endGame() {
     gameStarted = false;
 
     if (score >= TARGET_SCORE) {
-
-        endingText.innerHTML =
-            `성공!<br>FINAL SCORE : ${score}`;
-
+        endingText.innerHTML = `성공!<br>FINAL SCORE : ${score}`;
         endingImage.src = "assets/ending1.png";
-
     } else {
-
-        endingText.innerHTML =
-            `실패...<br>FINAL SCORE : ${score}`;
-
+        endingText.innerHTML = `실패...<br>FINAL SCORE : ${score}`;
         endingImage.src = "assets/ending2.png";
     }
 
     endingScreen.classList.remove("hidden");
-
     endingScreen.classList.add("showEnding");
 }
 
@@ -353,25 +281,18 @@ function resetGame() {
     gameStarted = false;
 
     clearInterval(timerInterval);
-
     clearTimeout(judgeTimeout);
 
     bgm.pause();
-
     bgm.currentTime = 0;
 
-    notes.forEach((note) => {
-        note.element.remove();
-    });
-
+    notes.forEach(n => n.element.remove());
     notes = [];
 
     score = 0;
-
     scoreText.textContent = 0;
 
     timeLeft = GAME_TIME;
-
     timerBar.style.width = "100%";
 
     judgement.classList.remove("judgeShow");
@@ -380,6 +301,5 @@ function resetGame() {
     endingScreen.classList.remove("showEnding");
 
     gameContainer.classList.add("hidden");
-
     titleScreen.style.display = "flex";
 }
