@@ -182,7 +182,7 @@ body {
 }
 
 #laneAutumn {
-    height: clamp(18vh, 20vw, 34vh);
+    height: clamp(12vh, 20vw, 34vh);
 }
 
 #track {
