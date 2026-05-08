@@ -29,6 +29,8 @@ let gameStarted = false;
 
 let timerInterval;
 
+let judgeTimeout;
+
 const GAME_TIME = 60;
 const TARGET_SCORE = 1000;
 
@@ -37,6 +39,8 @@ let timeLeft = GAME_TIME;
 bgm.loop = true;
 
 const noteSpeed = 0.6;
+
+const targetPositions = {};
 
 startButton.addEventListener("click", startGame);
 resetButton.addEventListener("click", resetGame);
@@ -68,6 +72,8 @@ function startGame() {
 
     bgm.volume = volumeSlider.value;
 
+    cacheTargetPositions();
+
     if (bgmToggle.checked) {
 
         bgm.play().catch(() => {
@@ -80,6 +86,15 @@ function startGame() {
     startTimer();
 
     requestAnimationFrame(update);
+}
+
+function cacheTargetPositions() {
+
+    ["pink", "green", "white"].forEach(color => {
+
+        targetPositions[color] = getTargetPosition(color);
+
+    });
 }
 
 function spawnNextNote() {
@@ -155,13 +170,15 @@ function update() {
 
     if (!gameStarted) return;
 
-    notes.forEach((note, index) => {
+    for (let i = notes.length - 1; i >= 0; i--) {
+
+        const note = notes[i];
 
         note.x += noteSpeed;
 
         note.element.style.left = `calc(${note.x}% - 22.5px)`;
 
-        const targetX = getTargetPosition(note.color);
+        const targetX = targetPositions[note.color];
 
         const missLimit =
             note.color === "white"
@@ -174,11 +191,11 @@ function update() {
 
             note.element.remove();
 
-            notes.splice(index, 1);
+            notes.splice(i, 1);
 
             setTimeout(spawnNextNote, 1000);
         }
-    });
+    }
 
     requestAnimationFrame(update);
 }
@@ -203,13 +220,15 @@ function getTargetPosition(color) {
 
 window.addEventListener("keydown", (e) => {
 
+    if (!gameStarted) return;
+
     if (e.code !== "Space") return;
 
     if (notes.length <= 0) return;
 
     const firstNote = notes[0];
 
-    const targetX = getTargetPosition(firstNote.color);
+    const targetX = targetPositions[firstNote.color];
 
     const distance = Math.abs(firstNote.x - targetX);
 
@@ -270,9 +289,15 @@ function showJudge(text) {
         judgement.src = "assets/miss.png";
     }
 
+    clearTimeout(judgeTimeout);
+
+    judgement.classList.remove("judgeShow");
+
+    void judgement.offsetWidth;
+
     judgement.classList.add("judgeShow");
 
-    setTimeout(() => {
+    judgeTimeout = setTimeout(() => {
 
         judgement.classList.remove("judgeShow");
 
@@ -308,6 +333,8 @@ function resetGame() {
     gameStarted = false;
 
     clearInterval(timerInterval);
+
+    clearTimeout(judgeTimeout);
 
     bgm.pause();
 
