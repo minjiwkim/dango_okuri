@@ -183,11 +183,15 @@ body {
 
 #laneAutumn {
     height: clamp(18vh, 20vw, 34vh);
+    width: auto;
+    object-fit: contain;
+    display: block;
 }
 
 @media (max-width: 768px) {
     #laneAutumn {
         height: 14vh;
+        width: auto;
     }
 }
 
