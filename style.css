@@ -182,7 +182,13 @@ body {
 }
 
 #laneAutumn {
-    height: clamp(12vh, 20vw, 34vh);
+    height: clamp(18vh, 20vw, 34vh);
+}
+
+@media (max-width: 768px) {
+    #laneAutumn {
+        height: 14vh;
+    }
 }
 
 #track {
